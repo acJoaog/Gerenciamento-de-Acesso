@@ -63,11 +63,30 @@ docker build -f docker/Dockerfile -t gerenciamento_acesso .
 
 Execute o container:
 
+> **Nota:** A flag `--privileged` é necessária para acesso total a dispositivos USB e configuração do udev.
+
 ```bash
 docker run -it --device=/dev/ttyUSB0 gerenciamento_acesso --privileged
 ```
+> **Nota:** Se estiver simulando um dispositvo no Windows deve habilitar acesso da portas COM com o WSL para comunicação com o container.
 
-> **Nota:** A flag `--privileged` é necessária para acesso total a dispositivos USB e configuração do udev.
+Instale o usbipd no Windows (via PowerShell como administrador):
+
+```bash
+winget install --interactive --exact dorssel.usbipd-win
+```
+
+Conecte o dispositivo ao WSL:
+
+```bash
+usbipd wsl list
+```
+
+Conecte o dispositivo (substitua BUSID pelo ID correto):
+
+```bash
+usbipd wsl attach --busid <BUSID>
+```
 
 ---
 
