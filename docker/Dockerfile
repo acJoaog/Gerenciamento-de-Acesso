@@ -29,9 +29,11 @@ COPY ../firmware/src/ /firmware/src/
 
 # compilando arquivos C
 RUN mkdir -p /firmware/data && \
-    gcc -o main src/main.c src/menu.c src/controle.c src/database.c \
-    -lmodbus -lsqlite3 -lsodium && \
-    chmod +x main
+    gcc -o /firmware/main /firmware/src/*.c \
+    -I/usr/include \
+    -L/usr/lib \
+    -lmodbus -lsqlite3 -lsodium \
+    -Wall -Os
 
 # copiando configs
 COPY ../rules/99-usb-serial.rules /etc/udev/rules.d/

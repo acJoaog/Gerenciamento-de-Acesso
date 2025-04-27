@@ -8,6 +8,6 @@ int main() {
         abrir_menu(); // inicializa menu
     }
 
-    db_close();
+    db_close(); // fecha conexão com SQlite
     return 0;
 }

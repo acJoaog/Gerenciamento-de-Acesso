@@ -10,7 +10,7 @@ static sqlite3* db;
 void db_init() {
 
     // define caminho para arquivo de dados
-    if (sqlite3_open("data/acesso.db", &db) != SQLITE_OK) {
+    if (sqlite3_open("/firmware/data/acesso.db", &db) != SQLITE_OK) {
         fprintf(stderr, "Não foi possível abrir o banco de dados: %s\n", sqlite3_errmsg(db));
         exit(1);
     }
@@ -113,25 +113,31 @@ void db_add_user() {
     sqlite3_finalize(stmt);
 }
 
+// validando credenciais
 int db_validate_user(const char* nome, const char* senha, int* is_admin) {
+
+    // busca infos sql
     const char* sql = "SELECT senha, admin FROM usuarios WHERE nome = ?;";
     sqlite3_stmt* stmt;
     int result = 0;
 
+    // executa querry
     if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
         fprintf(stderr, "\nErro ao preparar SQL: %s\n", sqlite3_errmsg(db));
         return 0;
     }
 
+    // implementando parametros a querry
     if (sqlite3_bind_text(stmt, 1, nome, -1, SQLITE_STATIC) != SQLITE_OK) {
         fprintf(stderr, "\nErro ao bind do nome: %s\n", sqlite3_errmsg(db));
         sqlite3_finalize(stmt);
         return 0;
     }
 
+    // obtem e verifica senhas
     if (sqlite3_step(stmt) == SQLITE_ROW) {
         const char* senha_armazenada = (const char*)sqlite3_column_text(stmt, 0);
-        *is_admin = sqlite3_column_int(stmt, 1);
+        *is_admin = sqlite3_column_int(stmt, 1); // aplica no ponteiro a info
 
         if (senha_armazenada && strcmp(senha_armazenada, senha) == 0) {
             result = 1;
@@ -142,6 +148,7 @@ int db_validate_user(const char* nome, const char* senha, int* is_admin) {
     return result;
 }
 
+// listar usuarios
 void db_list_users() {
     const char* sql = "SELECT nome FROM usuarios;";
     sqlite3_stmt* stmt;
@@ -162,10 +169,14 @@ void db_list_users() {
     sqlite3_finalize(stmt);
 }
 
+// mostrar log
 void db_list_events() {
+
+    // variaveis temporarias
     char nome[50], senha[50];
     int is_admin;
 
+    // validar credenciais
     printf("Nome de administrador: ");
     fflush(stdout);
     if (fgets(nome, sizeof(nome), stdin) == NULL) {
@@ -187,6 +198,7 @@ void db_list_events() {
         return;
     }
 
+    // buscando logs
     const char* sql = "SELECT usuario, porta, acao, data_hora FROM eventos ORDER BY data_hora DESC;";
     sqlite3_stmt* stmt;
 
@@ -195,6 +207,7 @@ void db_list_events() {
         return;
     }
 
+    // mostrando logs
     printf("\nEventos registrados:\n");
     fflush(stdout);
     
@@ -211,7 +224,10 @@ void db_list_events() {
     sqlite3_finalize(stmt);
 }
 
+// cadastrar log
 void db_log_event(const char* usuario, int porta, const char* acao) {
+
+    // inserir eventos sql
     const char* sql = "INSERT INTO eventos (usuario, porta, acao) VALUES (?, ?, ?);";
     sqlite3_stmt* stmt;
     
@@ -220,10 +236,12 @@ void db_log_event(const char* usuario, int porta, const char* acao) {
         return;
     }
     
+    // implementar variaveis
     sqlite3_bind_text(stmt, 1, usuario, -1, SQLITE_STATIC);
     sqlite3_bind_int(stmt, 2, porta);
     sqlite3_bind_text(stmt, 3, acao, -1, SQLITE_STATIC);
     
+    // executar sql
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         fprintf(stderr, "Erro ao executar SQL: %s\n", sqlite3_errmsg(db));
     }
