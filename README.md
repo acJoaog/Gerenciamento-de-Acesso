@@ -79,13 +79,13 @@ winget install --interactive --exact dorssel.usbipd-win
 Conecte o dispositivo ao WSL:
 
 ```bash
-usbipd wsl list
+usbipd list
 ```
 
 Conecte o dispositivo (substitua BUSID pelo ID correto):
 
 ```bash
-usbipd wsl attach --busid <BUSID>
+usbipd attach --wsl --busid <BUSID>
 ```
 
 ---
