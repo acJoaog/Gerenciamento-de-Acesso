@@ -59,6 +59,7 @@ void db_add_user() {
     printf("Cadastrando Usuário.\n");
     fflush(stdout);  // força a saída imediata
 
+    // variaveis temporarias
     char nome[50], senha[50]; 
     int admin;
 
