@@ -45,7 +45,8 @@ COPY ../rules/99-usb-serial.rules /etc/udev/rules.d/
 # RUN mkdir server
 
 RUN python3 -m venv ../server/venv && \
-    /server/venv/bin/pip install flask
+    /server/venv/bin/pip install flask \
+    /server/venv/bin/pip install requests
 
 COPY ../server/ ../server
 
