@@ -46,4 +46,4 @@ jobs:
 
       - name: Run server test
         run: |
-        docker exec gerenciamento_acesso-container /bin/sh -c "source /server/venv/bin/activate && python3 /server/test/test_server.py"
+          docker exec gerenciamento_acesso-container /bin/sh -c "source /server/venv/bin/activate && python3 /server/test/test_server.py"
