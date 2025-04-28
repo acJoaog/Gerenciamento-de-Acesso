@@ -12,6 +12,7 @@ void abrir_menu() {
     printf("3. Exibir Logs (admin)\n");
     printf("4. Liberar porta 1\n");
     printf("5. Liberar porta 2\n");
+    printf("6. Ler estado das Portas\n");
     printf("Escolha: "); 
     fflush(stdout);  // força a saída imediata
     scanf("%d", &op);
@@ -24,6 +25,7 @@ void abrir_menu() {
         case 3: db_list_events(); break;
         case 4: liberar_porta(0x34); break;
         case 5: liberar_porta(0x35); break;
+        case 6: ler_estado_registradores(); break;
         default: printf("Opção inválida.\n");
     }
 }

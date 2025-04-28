@@ -92,3 +92,33 @@ void liberar_porta(int PORT_REGISTER){
     modbus_close(ctx);
     modbus_free(ctx);
 }
+
+void ler_estado_registradores(){
+    uint8_t estados[2];
+
+    // configurando modbus
+    modbus_t *ctx = modbus_new_rtu(SERIAL_PORT, 9600, 'N', 8, 1);
+    if (ctx == NULL) {
+        fprintf(stderr, "Falha ao criar contexto Modbus\n");
+        return;
+    }
+
+    modbus_set_slave(ctx, SLAVE_ESP8266); 
+
+    if (modbus_connect(ctx) == -1) {
+        fprintf(stderr, "Falha na conexão: %s\n", modbus_strerror(errno));
+        modbus_free(ctx);
+        return;
+    }
+
+    // ler o estado das portas
+    if (modbus_read_bits(ctx, 0x34, 2, estados) == -1) {
+        fprintf(stderr, "Falha ao ler estados: %s\n", modbus_strerror(errno));
+    } else {
+        printf("Estado da Porta 1 (0x34): %d\n", estados[0]);
+        printf("Estado da Porta 2 (0x35): %d\n", estados[1]);
+    }
+
+    modbus_close(ctx);
+    modbus_free(ctx);
+}
