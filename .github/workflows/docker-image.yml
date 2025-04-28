@@ -26,6 +26,8 @@ jobs:
         docker run -d -p 5000:5000 gerenciamento_acesso --privileged
 
   test:
+    runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
