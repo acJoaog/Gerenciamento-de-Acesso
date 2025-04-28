@@ -66,7 +66,7 @@ Execute o container:
 > **Nota:** A flag `--privileged` é necessária para acesso total a dispositivos USB e configuração do udev.
 
 ```bash
-docker run -it --device=/dev/ttyUSB0 gerenciamento_acesso --privileged
+docker run -it -p 5000:5000 --device=/dev/ttyUSB0 gerenciamento_acesso --privileged
 ```
 > **Nota:** Se estiver simulando um dispositvo no Windows deve habilitar acesso da portas COM com o WSL para comunicação com o container.
 

@@ -9,5 +9,11 @@ if [ -e /dev/ttyUSB0 ]; then
     chmod 666 /dev/ttyUSB0
 fi
 
+# executa web server
+cd /server
+. venv/bin/activate
+python3 server.py > /dev/null 2>&1 &
+
 # executa o aplicativo principal
-exec ./main
+cd ../firmware
+exec ./main 

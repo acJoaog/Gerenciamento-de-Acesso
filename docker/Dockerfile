@@ -17,6 +17,9 @@ RUN apk update && \
     minicom \
     screen \
     linux-headers \
+    python3 \
+    py3-pip \ 
+    python3-dev \
     && rm -rf /var/cache/apk/*
 
 # define o diretorio principal
@@ -38,8 +41,19 @@ RUN mkdir -p /firmware/data && \
 # copiando configs
 COPY ../rules/99-usb-serial.rules /etc/udev/rules.d/
 
+# configurando ambiente py para server HTTP
+# RUN mkdir server
+
+RUN python3 -m venv ../server/venv && \
+    /server/venv/bin/pip install flask
+
+COPY ../server/ ../server
+
 # copia e executa o entrypoint para incializar a aplicação
 COPY ../scripts/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+    
+# expondo porta
+EXPOSE 5000
 
 ENTRYPOINT ["/entrypoint.sh"]

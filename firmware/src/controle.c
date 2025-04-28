@@ -22,6 +22,17 @@ void liberar_porta(int PORT_REGISTER){
     // variaveis para autenticação
     char nome[50], senha[50];
     int is_admin;
+    int port_id = 0;
+
+    // traduzindo endereço para numero da porta
+
+    if(PORT_REGISTER == 0x34){
+        port_id = 1;
+    }
+
+    if(PORT_REGISTER == 0x35){
+        port_id = 2;
+    }
 
     // verificando credenciais
     printf("Nome de usuario: ");
@@ -64,7 +75,7 @@ void liberar_porta(int PORT_REGISTER){
         fprintf(stderr, "Falha ao escrever: %s\n", modbus_strerror(errno));
     } else {
         printf("Abrindo porta!\n");
-        db_log_event(nome, PORT_REGISTER, "abriu");
+        db_log_event(nome, port_id, "abriu");
     }
 
     // aguarda 5 segundos
@@ -75,7 +86,7 @@ void liberar_porta(int PORT_REGISTER){
         fprintf(stderr, "Falha ao escrever: %s\n", modbus_strerror(errno));
     } else {
         printf("Fechando porta!\n");
-        db_log_event(nome, PORT_REGISTER, "fechou");
+        db_log_event(nome, port_id, "fechou");
     }
 
     modbus_close(ctx);
