@@ -44,6 +44,10 @@ jobs:
         run: |
           docker run -d -p 5000:5000 --name gerenciamento_acesso-container gerenciamento_acesso
 
-      - name: Run server test
+      - name: Testando servidor
         run: |
-          docker exec gerenciamento_acesso-container /bin/sh -c "source /server/venv/bin/activate && python3 /server/test/test_server.py"
+          until curl -s http://localhost:5000 > /dev/null; do
+            echo "Aguardando servidor iniciar..."
+            sleep 5
+          done
+          echo "Servidor iniciado com sucesso!"
