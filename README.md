@@ -34,6 +34,7 @@ Este projeto cria um ambiente de desenvolvimento baseado em Docker com Alpine Li
 - **SQLite3**
 - **Libmodbus**
 - **udev**
+- **Flask**
 - **Docker**
 
 ---
@@ -102,6 +103,10 @@ usbipd attach --wsl --busid <BUSID>
   └── 99-usb-serial.rules    # Regras udev para dispositivos USB
 /docker
   └── Dockerfile                  # Definição da imagem Docker
+/server
+  ├── server.py             # Script de inicialização do Flask
+  ├── templates/            # Diretorio de modelos html
+    └── eventos.html
 ```
 
 ---
@@ -124,6 +129,12 @@ Compilar novamente o projeto manualmente dentro do container:
 
 ```bash
 gcc -o /firmware/main /firmware/src/*.c -I/usr/include -L/usr/lib -lmodbus -lsqlite3 -lsodium -Wall -Os
+```
+
+Acessar o servidor Flask na porta 5000:
+
+```bash
+curl http://localhost:5000/
 ```
 
 ---
